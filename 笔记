@@ -1,0 +1,82 @@
+viewport 视口(可视区窗口)
+	默认不设置viewport一般可视区宽度在移动端是980
+	width 可视区的宽度 (number||device-width)
+	user-scalable 是否允许用户缩放 (yes||no) iOS10无效 (我们放在事件章节解决)
+	initial-scale 初始缩放比例
+	minimum-scale 最小缩放比例
+	maximum-scale 最大缩放比例
+
+基本设置
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    //x5内核 禁止横屏显示
+    <meta name="x5-orientation" content="portrait" />
+    //x5内核 全屏显示
+    <meta name="x5-fullscreen" content="true" />
+    //uc 禁止横屏显示
+    <meta name="screen-orientation" content="portrait">
+    //uc 全屏显示
+    <meta name="full-screen" content="yes">
+    //禁止 识别 电话号码 邮箱
+    <meta name="format-detection" content="telephone=no, email=no" />
+
+css 设置
+    清除 点击时的 高亮 状态
+    a, input,
+    button{
+    	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    清除在ios 下按钮圆角
+    input,
+    button {
+    	-webkit-appearance: none;
+    	border-radius: 0;
+    }
+
+    字体设置
+    body {
+    	font-family: Helvetica;
+    }
+
+    body * {
+        禁止用户字体缩放
+    	-webkit-text-size-adjust: 100%;
+    	选中
+    	-webkit-user-select: none;
+    }
+
+    Font Boosting  在一段文字我们没有给他设置高度的时候，在webkit内核下，文字的大小被浏览器放大了
+    	解决办法:
+    		1.设置高度
+    		2.设置最大高度 max-height
+
+
+适配
+    //根据屏幕大小 和 目标值 设置视口 缩放比列
+    (function(){
+    	var w = window.screen.width;
+    	var targetW = 320;
+    	var scale = w/targetW; //当前尺寸/目标尺寸
+    	var meta = document.createElement("meta");
+    	meta.name = "viewport";
+    	meta.content = "user-scalable=no,initial-scale="+scale+",minimum-scale="+scale+",maximum-scale="+scale+""
+    	//console.log(scale);
+    	document.head.appendChild(meta);
+    })();
+    </script>
+
+   rem
+        利用 less 来写样式 计算 rem
+        <script>
+            (function(){
+                var html = document.documentElement;
+                var hWidth = html.getBoundingClientRect().width;
+                html.style.fontSize = hWidth/15 + "px";
+                //设计图750/15 = 50   ---- 1rem = 50px;
+            })()
+        </script>
+
+弹性盒模型
+
+
+
