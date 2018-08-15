@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <title>Title</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        body,html{
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        footer,
+        header{
+            height: 40px;
+            background: #434343;
+            text-align: center;
+            line-height: 40px;
+            color: #ffffff;
+        }
+        footer{
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        #warp{
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        #list{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #list li{
+            line-height: 36px;
+            border-bottom: 1px solid #434343;
+            text-indent: 20px;
+        }
+    </style>
+</head>
+<body>
+<header>header</header>
+<div id="warp">
+    <ul id="list"></ul>
+</div>
+<footer>footer</footer>
+<script>
+    document.addEventListener('touchstart',function(ev){
+        ev.preventDefault();
+    })
+
+    let warp = document.querySelector('#warp');
+    let list = document.querySelector('#list');
+    Createli ();
+
+    var startPoint = 0;
+    var startEl = 0;
+    var elTranslateY = 0;
+    list.addEventListener('touchstart', function(e) {
+        startPoint = e.changedTouches[0].pageY;
+        startEl = elTranslateY;
+    });
+    list.addEventListener('touchmove', function(e) {
+        var nowPoint = e.changedTouches[0].pageY;
+        var dis =  nowPoint - startPoint;
+        elTranslateY = startEl + dis;
+        list.style.WebkitTransform = list.style.transform = "translateY("+elTranslateY+"px)";
+    });
+
+
+    function Createli () {
+        var html = '';
+        for(var i=0; i<100; i++){
+            html += '<li>这里是第：'+i+'li</li>'
+        }
+        list.innerHTML = html;
+    }
+
+</script>
+</body>
+</html>

@@ -242,5 +242,21 @@ css 设置
             涉及当前事件的手指的一个列表
 
 
-transform----矩阵
+transform---变换
+    rotate 旋转  deg
+    skew 斜切
+    		skewX
+    	    skewY
+    scale 缩放 (原始大小的多少倍)(x,y)
+    		scaleX
+    		scaleY
+
+    变换基点
+    transform-origin: center center;
+    		关键字
+    		百分比
+    		距离单位(px,em,rem...)
+    先写后执行
+    box.style.transform = "scale(0.5) rotate(30deg)";
+
 
