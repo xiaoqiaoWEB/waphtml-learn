@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width: 1000px;
+            height: 600px;
+            margin: 0 auto;
+            border: 2px solid #dedede;
+            display: -webkit-box;
+            /*设置主轴*/
+            -webkit-box-orient: horizontal;
+            -webkit-box-pack: justify;
+        }
+        .box div{
+            width: 100px;
+            height: 100px;
+            background: red;
+            line-height: 100px;
+            text-align: center;
+            color: #fff;
+            font-size: 40px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+</div>
+</body>
+</html>

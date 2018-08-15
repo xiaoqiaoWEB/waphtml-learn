@@ -77,6 +77,170 @@ css 设置
         </script>
 
 弹性盒模型
+    新版弹性盒模型
+        display: flex;
+
+        主轴方向
+            水平
+            flex-direction: row
+            垂直
+            flex-direction: column
+
+        元素排列方向排列
+            水平方向
+            flex-direction: row-reverse
+            垂直方向
+            flex-direction: column-reverse
+
+        主轴上的富裕空间管理
+            元素在主轴开始位置 ，富裕空间在主轴的结束位置
+            justify-content: flex-start;
+
+            元素在主轴结束位置，富裕空间在主轴开始位置
+            justify-content: flex-end;
+
+            元素在主轴中间,富裕空间在主轴两侧
+            justify-content: center;
+
+            富裕空间平均分配在每两个元素之间
+            justify-content: space-between;
+
+            富裕空间平均分配在每个元素两侧
+            justify-content: space-around;
+
+            每个元素之间的距离一样
+            justify-content: space-evenly
+
+        侧轴方向的富裕空间管理
+            /*元素在侧轴开始位置，富裕空间在侧轴结束位置*/
+            /*align-items: flex-start;*/
+
+            /*元素在侧轴结束位置，富裕空间在侧轴开始位置*/
+            /*align-items: flex-end;*/
+
+            /*元素在侧轴中间位置，富裕空间在侧轴两侧*/
+            /*align-items: center;*/
+
+            /*根据侧轴方向上文字的基线对齐*/
+            /*align-items: baseline;*/
+
+        元素弹性空间
+            flex-grow: 1
+        元素具体位置--数值越小越靠前
+            order
 
 
+
+
+    旧版弹性和模型
+        display: -webkit-box;
+
+        主轴方向
+            水平
+            -webkit-box-orient: horizontal
+            垂直
+            -webkit-box-orient: vertical
+
+        元素方向
+            主轴-反向
+            -webkit-box-direction: reverse
+            -webkit-box-direction: normal
+
+        主轴上的富裕空间管理
+            /*元素在主轴的开始位置,富裕空间在主轴的结束位置*/
+            /*-webkit-box-pack: start;*/
+
+            /*元素在主轴结束位置，富裕空间在主轴开始位置*/
+            /*-webkit-box-pack: end;*/
+
+            /*元素在主轴中间,富裕空间在主轴两侧*/
+            /*-webkit-box-pack: center;*/
+
+            /*富裕空间平均分配在每两个元素之间*/
+            /*-webkit-box-pack: justify;*/
+
+        侧轴方向的富裕空间管理
+            /*元素在侧轴开始位置，富裕空间在侧轴结束位置*/
+            /*-webkit-box-align: start;*/
+
+            /*元素在侧轴结束位置，富裕空间在侧轴开始位置*/
+            /*-webkit-box-align: end;*/
+
+            /*元素在侧轴中间位置，富裕空间在侧轴两侧*/
+            /*-webkit-box-align: center;*/
+
+        元素弹性空间
+             -webkit-box-flex:1;
+
+        元素具体位置---数值越小越靠前
+              -webkit-box-ordinal-group
+
+
+响应式
+
+    媒体查询
+
+    样式引入
+    <link rel="stylesheet" href="01.css" media="all and (min-width:400px)"/>
+    <link rel="stylesheet" href="02.css" media="all and (min-width:600px)"/>
+    <link rel="stylesheet" href="03.css" media="all and (min-width:800px)"/>
+    <link rel="stylesheet" href="04.css" media="all and (min-width:1000px)"/>
+    <style>
+         @import url(01.css) (min-width:400px);
+         @import url(02.css) (min-width:600px);
+         @import url(03.css) (min-width:800px);
+         @import url(04.css) (min-width:1000px);
+    </style>
+    -----------bootstrap----------------------
+
+
+移动端事件
+    移动端的三大事件：
+        手指按下：
+    		ontouchstart
+    	手指移动：
+    		ontouchmove
+    	手指抬起
+    		ontouchend
+
+    	注意：
+    		在移动端开发的时候，浏览器的模拟器时好时坏，一般不用on的方式绑定事件函数，要用事件绑定的方式(addEventListener)。
+
+    pc上的事件比移动端的事件略慢，大概是在300ms左右
+
+    移动端的点透：
+    	当上层元素发生点击的时候，下层元素也有点击（焦点）特性，
+    	在300ms之后，如果上层元素消失或者隐藏，目标点就会“漂移”到
+    	下层元素身上，就会触发点击行为。
+
+    	解决：
+    		1.下层不要使用有点击（焦点）特性的元素。
+    		2.阻止pc事件。
+    		    优点
+    		        1.IOS10下设置meta禁止用户缩放是不可行的。（使用阻止pc事件就可以在IOS10下禁止用户缩放）
+
+                    2.解决IOS10下溢出隐藏的问题。
+
+                    3.禁止系统默认的滚动条、阻止橡皮筋效果
+
+                    4.禁止长按选中文字、选中图片、系统默认菜单
+
+                    5.解决点透问题
+
+                    6.也阻止了焦点元素的焦点行为(要正常使用：ev.stopPropagation()阻止冒泡)
+
+
+    移动端的事件对象
+
+       当用户在浏览器下触发了某个行为，事件对象会记录用户操作时一些细节信息。
+
+         touches
+            当前位于*屏幕*上的所有手指的一个列表
+         targetTouches
+            位于当前DOM元素上的手指的一个列表
+         changedTouches
+            涉及当前事件的手指的一个列表
+
+
+transform----矩阵
 

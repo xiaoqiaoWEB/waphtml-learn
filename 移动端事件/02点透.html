@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <style>
+        .box{
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            background: rgba(255,186,156,0.5);
+        }
+        .box3{
+            width: 600px;
+            height: 20px;
+            background: rgba(255,233,160,0.5);
+        }
+    </style>
+</head>
+<body>
+    <a href="http://n.swxpx.cn" class="a">到这里去</a>
+    <div class="box"></div>
+    <div class="box3"></div>
+    <input type="text" class="enter-input">
+    <script>
+
+        /*
+        *  移动端的点透：
+    	当上层元素发生点击的时候，下层元素也有点击（焦点）特性，
+    	在300ms之后，如果上层元素消失或者隐藏，目标点就会“漂移”到
+    	下层元素身上，就会触发点击行为。
+
+    	解决：
+    		1.下层不要使用有点击（焦点）特性的元素。
+    		2.阻止pc事件。
+
+        */
+
+        document.addEventListener('touchstart',function(ev){
+            ev.preventDefault();
+        });
+
+
+        let box = document.querySelector('.box');
+        let a = document.querySelector('.a');
+        let enterInput = document.querySelector('.enter-input');
+
+        enterInput.addEventListener('touchstart',function(ev){
+            ev.stopPropagation();
+        })
+
+
+        box.addEventListener('touchstart',start);
+
+        a.addEventListener('touchstart',link)
+
+        function start() {
+           this.style.display = 'none';
+        }
+        function link() {
+            window.location.href = this.href;
+        }
+
+
+    </script>
+</body>
+</html>

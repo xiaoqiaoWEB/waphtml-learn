@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <style>
+        .box{
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <script>
+        let box = document.querySelector('.box');
+
+
+        box.addEventListener('touchstart',start);
+        box.addEventListener('touchmove',move);
+        box.addEventListener('touchend',end)
+
+        function start() {
+            console.log('start')
+        }
+        function move() { //连续触发
+            console.log('move')
+        }
+        function end() {
+            console.log('end')
+        }
+
+    </script>
+</body>
+</html>
