@@ -260,3 +260,42 @@ transform---变换
     box.style.transform = "scale(0.5) rotate(30deg)";
 
 
+    矩阵
+        角度转弧度 = deg*Math.PI/180
+
+        transform: matrix(a,b,c,d,e,f);
+                   matrix(1, 0, 0, 1, 0, 0) 默认值
+            位移
+                x = e + x;
+                y = f + y;
+
+            缩放：
+                x轴:
+            		a = a*x;
+            		c = c*x;
+            		e = e*x;
+
+            	y轴:
+            		b = b*x;
+            		d = d*x;
+            		f = f*x;
+
+            斜切：
+            	x斜切：(deg)
+            		c = Math.tan(30/180*Math.PI);
+            	y斜切：(deg)
+                	b = Math.tan(30/180*Math.PI);
+
+            旋转：
+            	a = Math.cos(deg/180*Math.PI);
+            	b = Math.sin(deg/180*Math.PI);
+            	c = -Math.sin(deg/180*Math.PI);
+            	d = Math.cos(deg/180*Math.PI);
+    3D
+        给父级元素添加 景深
+        perspective
+
+        transform-style 元素在做3d变换时，是否保留子元素的3d变换
+        		flat 不保留
+        		preserve-3d 保留子元素3D变换
+

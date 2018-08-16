@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <title>Title</title>
+    <script>
+        document.addEventListener('touchstart',function (ev) {
+            ev.preventDefault();
+        })
+    </script>
+    <style>
+        #warp{
+            width: 100px;
+            height: 100px;
+            border: 1px solid #434343;
+            padding: 50px;
+        }
+        #box{
+            width: 100px;
+            height: 100px;
+            background: red;
+            transition: 1s;
+            -webkit-transition: 1s;
+        }
+    </style>
+</head>
+<body>
+    <div id="warp">
+        <div id="box"></div>
+    </div>
+
+    <script>
+        var box = document.getElementById('box');
+        box.addEventListener('touchend',function(){
+            // matrix(1, 0, 0, 1, 0, 0)
+            //  matrix(a, b, c, d, e, f)
+           //位移  x = e + x;  y = f + y;
+            //this.style.WebkitTransform = this.style.transform = "matrix(1, 0, 0, 1, 50, 50)";
+            // 缩放：
+		    // x轴:
+            //     a = a*x;
+            //     c = c*x;
+            //     e = e*x;
+            //
+            // y轴:
+            //     b = b*x;
+            //     d = d*x;
+            //      f = f*x;
+            //this.style.WebkitTransform = this.style.transform = "matrix(1.2, 0, 0, 1, 0, 0)"
+        })
+    </script>
+</body>
+</html>
