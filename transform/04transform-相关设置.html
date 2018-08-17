@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <title>Title</title>
+    <script>
+        document.addEventListener('touchstart',function (ev) {
+            ev.preventDefault();
+        })
+    </script>
+    <style>
+        *{padding: 0px;margin: 0;}
+        #warp{width: 100px;height: 100px;border: 1px solid #434343;padding: 100px;}
+        #box{width: 100px;height: 100px;background: #434343;}
+    </style>
+</head>
+<body>
+    <div id="warp">
+        <div id="box"></div>
+    </div>
+    <script>
+
+        /*
+            element.transform = {
+                rotate: 40,
+                scale: 200,
+                skew:
+                translate
+            }
+            console.log(element.transform.rotate);
+
+            如果要获取transform相关的属性，那transform相关的设置 也必须是通过该方法设置的
+        */
+
+        var box = document.getElementById('box');
+
+        box.addEventListener('touchend',function(){
+            cssTransform(this,'rotate',30);
+        })
+
+        function cssTransform(element,attr,val) {
+
+            if(!element.transform){
+                element.transform = {}; //存放 属性
+            }
+
+            //console.log(element.transform)
+
+            //判断设置 or 获取
+            if(typeof val == "undefined") {
+                //获取
+                return element.transform[attr]
+            }else {
+                //设置
+                element.transform[attr] = val;
+
+                element.style.WebkitTransform = element.style.transform = attr + "("+val+"deg)";
+            }
+        }
+
+    </script>
+</body>
+</html>
