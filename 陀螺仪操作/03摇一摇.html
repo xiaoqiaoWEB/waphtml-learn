@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <title>Document</title>
+</head>
+<body>
+<script type="text/javascript">
+    (function(){
+        var lastX;
+        var lastY;
+        var lastZ;
+        //手机晃动的幅度 最大 和最小
+        var maxRang = 80;
+        var minRang = 10;
+        //默认没有晃动
+        var isShake = false;
+        //window添加devicemotion（陀螺仪事件）
+        window.addEventListener('devicemotion', function(e) {
+            var motion = e.accelerationIncludingGravity;
+            var x = Math.round(motion.x);
+            var y = Math.round(motion.y);
+            var z = Math.round(motion.z);
+            //第一次打开的时候
+            if(typeof lastX == "undefined"){
+                lastX = x;
+                lastY = y;
+                lastZ = z;
+                return;
+            }
+            //手机晃动的幅度
+            var dis = Math.abs(x - lastX) + Math.abs(y - lastY) +
+                Math.abs(z - lastZ);
+            if(dis > maxRang) {//晃动
+                isShake = true;
+            }
+            if(dis < minRang && isShake) {
+                isShake = false;
+                //执行 摇一摇之后，要操作的内容
+                alert("您晃动了手机");
+            }
+            //当前
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+        });
+    })();
+</script>
+</body>
+</html>

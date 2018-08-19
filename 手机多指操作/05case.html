@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <style type="text/css">
+
+    </style>
+    <script type="text/javascript">
+        (function(){
+            var html = document.documentElement;
+            var width = html.clientWidth;
+            html.style.fontSize = width/16 + "px";
+        })();
+    </script>
+</head>
+<body>
+<div id="box"></div>
+<script type="text/javascript" src="m.Tween.js"></script>
+<script type="text/javascript">
+    document.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+    });
+    window.onload = function(){
+
+    };
+    function getDis(point1,point2){
+        var x = point2.x - point1.x;
+        var y = point2.y - point1.y;
+        return Math.sqrt(x*x + y*y);
+    }
+    function getDeg(point1,point2){
+        var x = point2.x - point1.x;
+        var y = point2.y - point1.y;
+        return Math.atan2(y,x)*180/Math.PI;
+    }
+    function setGesture(init){
+        var el = init.el;
+        var isGestrue = false;
+        var startPoint = [];
+        if(!el){
+            return;
+        }
+        el.addEventListener('touchstart', function(e) {
+            if(e.touches.length >= 2){
+                isGestrue = true;
+                startPoint[0] = {x:e.touches[0].pageX,y:e.touches[0].pageY};
+                startPoint[1] = {x:e.touches[1].pageX,y:e.touches[1].pageY};
+                init.start&&init.start.call(el,e);
+            }
+        });
+        el.addEventListener('touchmove', function(e) {
+            if(isGestrue&&e.touches.length >= 2){
+                var nowPoint = [];
+                nowPoint[0] = {x:e.touches[0].pageX,y:e.touches[0].pageY};
+                nowPoint[1] = {x:e.touches[1].pageX,y:e.touches[1].pageY};
+                var startDis = getDis(startPoint[0],startPoint[1]);
+                var nowDis = getDis(nowPoint[0],nowPoint[1]);
+                e.scale = nowDis/startDis;
+
+                var startDeg = getDeg(startPoint[0],startPoint[1]);
+                var nowDeg = getDeg(nowPoint[0],nowPoint[1]);
+                e.rotation = nowDeg - startDeg;
+                init.change&&init.change.call(el,e);
+            }
+        });
+        el.addEventListener('touchend', function(e) {
+            if(isGestrue){
+                if(e.touches.length < 2 || e.targetTouches.length < 1){
+                    isGestrue = false;
+                    init.end&&init.end.call(el,e);
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

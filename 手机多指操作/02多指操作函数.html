@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <style>
+        #box{
+            width: 200px;
+            height: 200px;
+            margin: 100px auto;
+            /*background: url("img/1.jpg");*/
+            /*background-size: cover;*/
+            background: red;
+        }
+    </style>
+    <script>
+        document.addEventListener('touchstart',function (ev) {
+            ev.preventDefault();
+        })
+        window.onload = function () {
+            var box = document.getElementById('box');
+
+            setGesture({
+                el:box,
+                start:function(e){
+                    this.style.background = '#dedede'
+                },
+                change:function(e){
+
+                },
+                end:function(e){
+                    this.style.background = 'red'
+                }
+            })
+        }
+
+
+        function setGesture(init){
+            var el = init.el;
+            var isGestrue = false; //是否出发了 gesture-多指操作
+            var startPoint = []; //记录坐标
+            if(!el){
+                return;
+            }
+            el.addEventListener('touchstart',function (e) {
+                if(e.touches.length >= 2){
+                    isGestrue = true;
+
+                    init.start && init.start.call(el,e);
+                }
+            })
+
+            el.addEventListener('touchmove',function (e) {
+                if(isGestrue&&e.touches.length >= 2){
+
+                }
+            })
+
+            el.addEventListener('touchend',function(e){
+                if(isGestrue){
+                    if(e.touches.length < e.targetTouches.length <1){
+                        isGestrue = false;
+                        init.end && init.end.call(el,e)
+                    }
+                }
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+<div id="box"></div>
+</body>
+</html>

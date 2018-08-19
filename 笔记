@@ -129,9 +129,6 @@ css 设置
         元素具体位置--数值越小越靠前
             order
 
-
-
-
     旧版弹性和模型
         display: -webkit-box;
 
@@ -298,4 +295,46 @@ transform---变换
         transform-style 元素在做3d变换时，是否保留子元素的3d变换
         		flat 不保留
         		preserve-3d 保留子元素3D变换
+
+
+陀螺仪操作
+    devicemotion  windown 事件
+    重力加速度
+    e.accelerationIncludingGravity
+    x,y,z
+        ios Android  z 值是相反的
+
+    列子：摇一摇
+
+检测手机横竖屏切换
+    window.addEventListener('orientationchange', function(e)
+    {
+    	alert(window.orientation);
+    });
+    window.orientation
+        横屏 90 -90
+        竖屏 0 - 180
+
+检测手机角度切换
+     window.addEventListener('deviceorientation', function(e)
+     {
+           var x = Math.round(e.beta);
+           var y = Math.round(e.gamma);
+           var z = Math.round(e.alpha);
+           document.innerHTML = "x:"+x;
+           documnet.innerHTML += "<br/>y:"+y;
+           document.innerHTML += "<br/>z:"+z;
+     });
+
+手机的 多指操作
+    /// gesture事件只有 ios 有
+    gesturestart
+        当手指触摸元素，当前屏幕上有两根或者两根以上的手指执行
+    gesturechange
+          e.scale; 缩放比：change时两根手指之间距离 和 start时两根手指之间的距离比值
+          e.rotation 旋转差: change时两根手指形成的直线和start时两根手指形成的直线，中间形成夹角
+    gestureend
+        当我们触发了 gesturestart时，然后抬起手指，这时屏幕上的手指个少于2个或者当前元素没有手指了，就会触发gestureend
+
+
 

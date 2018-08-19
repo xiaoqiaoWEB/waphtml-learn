@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no" />
+    <style>
+        #box{
+            width: 200px;
+            height: 200px;
+            margin: 100px auto;
+            /*background: url("img/1.jpg");*/
+            /*background-size: cover;*/
+            background: red;
+        }
+    </style>
+    <script>
+        document.addEventListener('touchstart',function (ev) {
+            ev.preventDefault();
+        })
+        window.onload = function () {
+            var box = document.getElementById('box');
+
+            setGesture({
+                el:box,
+                start:function(e){
+                    this.style.background = '#dedede'
+                },
+                change:function(e){
+                    //e.scale
+                    //e.rotation
+                    this.innerHTML = e.scale;
+                },
+                end:function(e){
+                    this.style.background = 'red'
+                }
+            })
+        }
+
+
+        function setGesture(init){
+            var el = init.el;
+            var isGestrue = false; //是否出发了 gesture-多指操作
+            var startPoint = []; //记录坐标
+            if(!el){
+                return;
+            }
+            el.addEventListener('touchstart',function (e) {
+                if(e.touches.length >= 2){
+                    isGestrue = true;
+                    startPoint[0] = {x:e.touches[0].pageX,y:e.touches[0].pageY};
+                    startPoint[1] = {x:e.touches[1].pageX,y:e.touches[1].pageY};
+                    init.start && init.start.call(el,e);
+                }
+            })
+
+            el.addEventListener('touchmove',function (e) {
+                if(isGestrue && e.touches.length >= 2){
+                    var nowPoint = [];
+                    nowPoint[0] = {x:e.touches[0].pageX,y:e.touches[0].pageY};
+                    nowPoint[1] = {x:e.touches[1].pageX,y:e.touches[1].pageY}
+                    //计算出两点间的距离
+                    var startDis = getDis(startPoint[0],startPoint[1]);
+                    var nowDis = getDis(nowPoint[0],nowPoint[1]);
+                    e.scale =nowDis/startDis;
+                    init.change && init.change.call(el,e);
+                }
+            })
+
+            el.addEventListener('touchend',function(e){
+                if(isGestrue){
+                    if(e.touches.length < e.targetTouches.length <1){
+                        isGestrue = false;
+                        init.end && init.end.call(el,e)
+                    }
+                }
+            })
+        }
+
+        //根据坐标计算两点之前的距离
+        function getDis(opt1,opt2) {
+            var x = opt1.x - opt2.x;
+            var y = opt1.y - opt2.y;
+            return Math.sqrt(x*x + y*y);
+        }
+
+    </script>
+</head>
+
+<body>
+<div id="box"></div>
+</body>
+</html>
