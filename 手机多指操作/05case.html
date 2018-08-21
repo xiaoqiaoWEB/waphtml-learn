@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <meta name="viewport" content="width=device-width,user-scalable=no" />
-    <style type="text/css">
-
-    </style>
+    <link rel="stylesheet" href="case.css" />
     <script type="text/javascript">
         (function(){
             var html = document.documentElement;
@@ -16,64 +14,219 @@
     </script>
 </head>
 <body>
-<div id="box"></div>
+<header>header</header>
+<div id="warp">
+    <div class="inner" id="inner">
+        <ul id="list">
+        </ul>
+        <div class="refresh">加载更多</div>
+    </div>
+</div>
+
+<section id="imgPage">
+    <div class="header">img</div>
+    <ul class="nav-list">
+        <li>向右90</li>
+        <li>向左90</li>
+        <li>放大</li>
+        <li>放小</li>
+    </ul>
+    <div class="warp">
+        <img src="1.jpg" id="imgUrl">
+    </div>
+</section>
+
+
 <script type="text/javascript" src="m.Tween.js"></script>
+<script type="text/javascript" src="case.js"></script>
 <script type="text/javascript">
     document.addEventListener('touchstart', function(e) {
         e.preventDefault();
     });
     window.onload = function(){
+        var warp = document.getElementById('warp');
+        var imgUrl = document.getElementById('imgUrl');
+        var navs = document.querySelectorAll('.nav-list li');
+        var list = document.getElementById('list');
+        var inner = document.getElementById('inner');
 
-    };
-    function getDis(point1,point2){
-        var x = point2.x - point1.x;
-        var y = point2.y - point1.y;
-        return Math.sqrt(x*x + y*y);
-    }
-    function getDeg(point1,point2){
-        var x = point2.x - point1.x;
-        var y = point2.y - point1.y;
-        return Math.atan2(y,x)*180/Math.PI;
-    }
-    function setGesture(init){
-        var el = init.el;
-        var isGestrue = false;
-        var startPoint = [];
-        if(!el){
-            return;
+        var dataImg = [];
+        var lengthImg = 16; //已经加载8张图片
+        var startLength = 0;
+
+        for (var i=startLength; i<200; i++) {
+            dataImg.push("img/"+(i%16 + 1)+".jpg")
         }
-        el.addEventListener('touchstart', function(e) {
-            if(e.touches.length >= 2){
-                isGestrue = true;
-                startPoint[0] = {x:e.touches[0].pageX,y:e.touches[0].pageY};
-                startPoint[1] = {x:e.touches[1].pageX,y:e.touches[1].pageY};
-                init.start&&init.start.call(el,e);
+        //模拟数据请求
+        createLi();
+        function createLi(){
+            var end = startLength + lengthImg;
+            for (var i=startLength; i<end; i++) {
+                var li = document.createElement('li');
+                li.src = dataImg[i];
+                li.isLoad = true;
+                list.appendChild(li);
             }
-        });
-        el.addEventListener('touchmove', function(e) {
-            if(isGestrue&&e.touches.length >= 2){
-                var nowPoint = [];
-                nowPoint[0] = {x:e.touches[0].pageX,y:e.touches[0].pageY};
-                nowPoint[1] = {x:e.touches[1].pageX,y:e.touches[1].pageY};
-                var startDis = getDis(startPoint[0],startPoint[1]);
-                var nowDis = getDis(nowPoint[0],nowPoint[1]);
-                e.scale = nowDis/startDis;
+            createImg();
+        }
+        //判断是否创建图片
+        function createImg(){
+            var boxRect = warp.getBoundingClientRect();
+            var bottom = boxRect.top + boxRect.height;
+            var lis = list.querySelectorAll('li');
 
-                var startDeg = getDeg(startPoint[0],startPoint[1]);
-                var nowDeg = getDeg(nowPoint[0],nowPoint[1]);
-                e.rotation = nowDeg - startDeg;
-                init.change&&init.change.call(el,e);
-            }
-        });
-        el.addEventListener('touchend', function(e) {
-            if(isGestrue){
-                if(e.touches.length < 2 || e.targetTouches.length < 1){
-                    isGestrue = false;
-                    init.end&&init.end.call(el,e);
+            var isEnd = false;
+
+            for(var i = 0; i < lis.length; i++){
+                var top = lis[i].getBoundingClientRect().top;//li相对可视区的top值
+                if(top<bottom && lis[i].isLoad){ //当前里 已经进入可视区
+                    showImg(lis[i])
+                    lis[i].isLoad = false;
                 }
             }
-        });
-    }
+        }
+
+        //加载图片 显示图片
+        function showImg(li){
+            var img = new Image();
+            img.src = li.src;
+
+            img.onload = function (){ //加载完成
+                li.appendChild(img);
+                /* 元素没有渲染完成，transition不起作用*/
+                setTimeout(function(){
+                    img.style.opacity = 1;
+                },100)
+            }
+        }
+
+        setimgUrl(imgUrl);
+
+        setScroll();
+
+        //设置滑动
+        function setScroll (){
+            mScroll({//transform 拖拽函数
+                el:warp,
+                start:function(){
+                   var innerTop = Math.round(css(inner,'translateY'))-5;
+                   var minTop = warp.offsetHeight - inner.offsetHeight;
+
+                  if(minTop>=innerTop){
+                      inner.querySelector('.refresh').style.opacity = 1;
+                      isEnd = true;
+                  }else{
+                      inner.querySelector('.refresh').style.opacity = 0;
+                      isEnd = false;
+                  }
+                },
+                move:function () {
+                    createImg();
+                },
+                end:function(){
+                    var innerTop = Math.round(css(inner,'translateY'))-5;
+                    var minTop = warp.offsetHeight - inner.offsetHeight;
+
+                    if(isEnd && minTop>=innerTop){
+                        //清楚定时器  取消回弹
+                       clearInterval(inner.timer)
+                        startLength += lengthImg;
+                        createLi();
+                        document.querySelector('#scrollBar').style.opacity = 0;
+                        isEnd = false;
+                    }
+                },
+                over:function () {
+                    console.log('over')
+                }
+            });
+        }
+        //设置图片的放大缩小操作
+        function setimgUrl(obj){
+            var startRotate = 0;
+            var startScale = 0;
+            var maxScale = 1.5;
+            var minScale = .5;
+            setGesture({ //多手指操作图片
+                el:obj,
+                start:function(e){
+                    startRotate = css(this,"rotate");
+                    startScale = css(this,"scale")/100;
+                },
+                change:function(e){
+                    var scale = startScale * e.scale;
+                    if(scale > maxScale){
+                        scale = maxScale;
+                    } else if(scale < minScale){
+                        scale = minScale;
+                    }
+                    css(this,"rotate",startRotate + e.rotation);
+                    css(this,"scale",scale*100);
+                },
+                end:function(){
+                    var deg = css(this,"rotate");
+                    deg = Math.round(deg/90);
+                    deg = deg * 90;
+                    MTween({
+                        el:this,
+                        target:{rotate:deg},
+                        time: 300,
+                        type: "easeBoth"
+                    });
+                }
+            })
+
+            navs[0].addEventListener("touchend",function(){
+                var deg = css(obj,"rotate");
+                deg = Math.round(deg/90) - 1;
+                deg = deg * 90;
+                MTween({
+                    el:obj,
+                    target:{rotate:deg},
+                    time: 300,
+                    type: "easeBoth"
+                });
+            });
+            navs[1].addEventListener("touchend",function(){
+                var deg = css(obj,"rotate");
+                deg = Math.round(deg/90) + 1;
+                deg = deg * 90;
+                MTween({
+                    el:obj,
+                    target:{rotate:deg},
+                    time: 300,
+                    type: "easeBoth"
+                });
+            });
+            navs[2].addEventListener("touchend",function(){
+                var scale = css(obj,"scale")/100;
+                scale += .1;
+                if(scale > maxScale){
+                    scale = maxScale;
+                }
+                MTween({
+                    el:obj,
+                    target:{scale:scale*100},
+                    time: 300,
+                    type: "easeBoth"
+                });
+            });
+            navs[3].addEventListener("touchend",function(){
+                var scale = css(obj,"scale")/100;
+                scale -= .1;
+                if(scale < minScale){
+                    scale = minScale;
+                }
+                MTween({
+                    el:obj,
+                    target:{scale:scale*100},
+                    time: 300,
+                    type: "easeBoth"
+                });
+            });
+        }
+
+    };
 </script>
 </body>
 </html>

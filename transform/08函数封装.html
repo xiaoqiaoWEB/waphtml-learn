@@ -58,7 +58,7 @@
         function createList(){
             var list = document.querySelector('#list');
             var inner = "";
-            for(var i = 0; i < 30; i++){
+            for(var i = 0; i < 200; i++){
                 inner += "<li>这是第"+i+"个li</li>"
             }
             list.innerHTML = inner;
@@ -71,7 +71,7 @@
             var wrap = document.querySelector('#wrap');
             mScroll({
                 el:wrap,
-                offBar: true
+                offBar: false
             })
         };
         function mScroll(init){
@@ -88,13 +88,13 @@
             var lastTime = 0;
             var lastTimeDis = 0;
             var maxTranslate = wrap.clientHeight - inner.offsetHeight;
-            if(!init.offBar){
+            if(!init.offBar){ //滚动条
                 var scale = wrap.clientHeight/inner.offsetHeight;
                 inner.style.minHeight = "100%";
-                scrollBar.style.cssText = "width:6px;background:rgba(0,0,0,.5);position:absolute;right:0;top:0;border-radius:3px;opacity:0;transition:.3s opacity;";
+                scrollBar.style.cssText = "width:4px;background:rgba(0,0,0,.5);position:absolute;right:0;top:0;border-radius:3px;opacity:0;transition:.3s opacity;";
                 wrap.appendChild(scrollBar);
             }
-            css(inner,"translateZ",0.01);
+            css(inner,"translateZ",0.01); //3D加速
             inner.addEventListener('touchstart', function(e) {
                 maxTranslate = wrap.clientHeight - inner.offsetHeight;
                 if(!init.offBar){
@@ -138,7 +138,7 @@
                     target = maxTranslate;
                     type = "backOut";
                 }
-                MTween({
+                MTween({ //回弹
                     el:inner,
                     target: {translateY:target},
                     time: Math.round(Math.abs(target - css(inner,"translateY"))*1.8),
